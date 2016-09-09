@@ -174,4 +174,4 @@ namespace Project_0
             return suitToString() + valueToString();
         }
     }
-}
+} // end class Card
