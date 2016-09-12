@@ -154,7 +154,7 @@ namespace Project_0
                     case 9:
                         return "9";
                     case 10:
-                        return "10";
+                        return "0";
                     case 11:
                         return "J";
                     case 12:
