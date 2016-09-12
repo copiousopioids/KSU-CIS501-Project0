@@ -18,6 +18,15 @@ namespace Project_0
         /// </summary>
         public List<Card> _hand;
 
+        /// <summary>
+        /// Determines whether the given player has used all their cards.
+        /// </summary>
+        public bool _isFinished = false;
+
+        /// <summary>
+        /// Determines whether the player is the user.
+        /// </summary>
+        public bool _isUser;
 
         /// <summary>
         /// Gets and sets the current hand of cards for the given player.
@@ -45,11 +54,13 @@ namespace Project_0
         /// <summary>
         /// Constructs a new player with a name.
         /// </summary>
-        /// <param name="name"></param>
-        public Player(string name)
+        /// <param name="name">The name of the player.</param>
+        /// <param name="isUser">Determines if this player is the user.</param>
+        public Player(string name, bool isUser)
         {
             _name = name;
             _hand = new List<Card>();
+            _isUser = isUser;
         }
 
         /// <summary>
@@ -75,56 +86,65 @@ namespace Project_0
         }
 
         /// <summary>
-        /// Discards all extra duplicates in a player's hand.
+        /// Discards all pairs in a player's hand. Designed for use at the beginning of the program.
         /// </summary>
-        public void DiscardDupes()
+        public void DiscardPairsAtStart()
         {
-            for (int j = 0; j < _hand.Count; j++)
+            bool[] markedForDiscard = new bool[_hand.Count];
+            for (int i = 0; i < _hand.Count; i++)
             {
-                for (int i = 0; i < _hand.Count; i++)
+                if (!markedForDiscard[i])
                 {
-                    if (_hand[j] != _hand[i])
+                    for (int j = 0; j < _hand.Count; j++)
                     {
-                        if (_hand[j].CardValue == _hand[i].CardValue)
+                        if (_hand[i] != _hand[j] && !markedForDiscard[i] && !markedForDiscard[j])
                         {
-                            _hand.Remove(_hand[i]);
-                            break;
+                            if (_hand[i].CardValue == _hand[j].CardValue)
+                            {
+                                markedForDiscard[i] = true;
+                                markedForDiscard[j] = true;
+                            }
                         }
                     }
+                }
+            }
+
+            for (int k = _hand.Count - 1; k >= 0; k--)
+            {
+                if (markedForDiscard[k] == true)
+                {
+                    _hand.RemoveAt(k);
                 }
             }
         }
 
         /// <summary>
-        /// Discards all pairs in a player's hand. Returns false if the player has no cards left.
+        /// Checks if the given card has a pair in the hand.
+        /// Returns true if their hand is empty.
+        /// Otherwise, returns false.
         /// </summary>
-        /// <returns>returns false if the player has no cards left. Otherwise, returns true.</returns>
-        public bool DiscardPairs()
+        /// <param name="c">The card to add/match.</param>
+        /// <returns>Returns true if their hand is empty. Returns false otherwise.</returns>
+        public bool AddCard(Card c)
         {
-            for (int j = 0; j < _hand.Count; j++)
+            bool containedCard = false;
+            for (int i = _hand.Count - 1; i >= 0; i--)
             {
-                for (int i = 0; i < _hand.Count; i++)
+                if (c.CardValue == _hand[i].CardValue)
                 {
-                    if (_hand[j] != _hand[i])
+                    _hand.RemoveAt(i);
+                    containedCard = true;
+                    if (_hand.Count <= 0)
                     {
-                        if (_hand[j].CardValue == _hand[i].CardValue)
-                        {
-                            _hand.Remove(_hand[i]);
-                            _hand.Remove(_hand[j]);
-                            break;
-                        }
+                        return true;
                     }
                 }
             }
-            
-            if (_hand.Count <= 0)
+            if (!containedCard)
             {
-                return false;
+                _hand.Add(c);
             }
-            else
-            {
-                return true;
-            }
+            return false;
         }
 
         /// <summary>
