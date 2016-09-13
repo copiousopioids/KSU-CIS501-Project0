@@ -55,19 +55,24 @@ namespace Project_0
         /// <param name="game"></param>
         public void DisplayHands(Game game)
         {
-            List<string> handList = new List<string>();
             foreach (Player p in game._playerList)
             {
-                if (p != null)
-                {
-                    handList.Add(p.HandToString());
-                }
+                Console.WriteLine(p._name + " : " + p.HandToString());
             }
-            Console.WriteLine(game._playerList[0]._name + "    : " + handList[0]);
-            for (int i = 1; i < handList.Count; i++)
-            {
-                Console.WriteLine(game._playerList[i]._name + " : " + handList[i]);
-            }
+            
+            //List<string> handList = new List<string>();
+            //foreach (Player p in game._playerList)
+            //{
+            //    if (p != null && !p._isFinished)
+            //    {
+            //        handList.Add(p.HandToString());
+            //    }
+            //}
+            //Console.WriteLine(game._playerList[0]._name + "    : " + handList[0]);
+            //for (int i = 1; i < handList.Count; i++)
+            //{
+            //    Console.WriteLine(game._playerList[i]._name + " : " + handList[i]);
+            //}
         }
 
         /// <summary>
